@@ -1,0 +1,102 @@
+from sanic import Sanic, response
+from sanic_jinja2 import SanicJinja2
+from sanic.response import redirect
+from datetime import datetime
+
+import database as db
+
+app = Sanic(__name__)
+jinja = SanicJinja2(app)
+app.static('/static', './static')
+#
+# posts = [
+#     {
+#         'id': 1,
+#         'title': 'thoi tiet HN',
+#         'content': 'nhieu mau co mua vai noi',
+#         'comments': []
+#     },
+#     {
+#         'id': 2,
+#         'title': 'thoi su trong ngay',
+#         'content': 'hom nay khong co gi dac biet',
+#         'comments': []
+#     },
+#     {
+#         'id': 3,
+#         'title': 'the thao bong da',
+#         'content': 'ket qua giai ngoai hang anh dem qua',
+#         'comments': []
+#     }
+# ]
+
+
+def get_news():
+    pass
+
+
+@app.route('/')
+@app.route('/index')
+async def home(request):
+    posts = db.get_all_posts()
+    return jinja.render('index.html', request, posts=posts)
+
+
+@app.route('/post/<id:int>', methods=['GET', 'POST'])
+async def post(request, id):
+    post = db.get_post(id)
+    comments = db.get_comment(id)
+    if post is not None:
+        return jinja.render('post.html', request, post=post, comments=comments)
+    # return response.text(posts[id])
+    return response.text('no post')
+
+
+@app.route('/create_post', methods=['GET', 'POST'])
+async def create_post(request):
+    if len(request.form) > 0:
+        title = request.form.get('title')
+        content = request.form.get('content')
+        post =  {
+            'create_at': datetime.now(),
+            'title': title,
+            'content': content
+        }
+        # posts.append(
+        #     {
+        #         'id': n_id,
+        #         'title': title,
+        #         'content': content
+        #     }
+        # )
+        db.add_post(post)
+        return redirect(app.url_for('home'))
+    return jinja.render('create_post.html', request)
+
+
+@app.route('/create_comment/<id:int>', methods=['POST'])
+async def create_comment(request, id):
+    # for post in posts:
+    #     if post['id'] == id:
+    #         time = str(datetime.now())
+    #         comment = request.form.get('comment')
+    #         if post.get('comments') is None:
+    #             post['comments'] = []
+    #         post["comments"].append({'time': time, 'comment': comment})
+    comment = {
+        'post_id': id,
+        'content': request.form.get('comment'),
+        'create_at': datetime.now()
+    }
+    db.add_comment(comment)
+    return redirect(app.url_for('post', id=id))
+
+
+@app.route('about')
+async def about(request):
+    return jinja.render('about.html', request)
+
+
+if __name__ == '__main__':
+    db.initdb()
+    app.run(host='0.0.0.0', port=8000, debug=True)

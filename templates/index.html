@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+<div class="col-md-8 blog-main">
+<div class="blog-post">
+  <br>
+  <ul>
+    {% for item in posts %}
+    <li>
+      <h2 class="blog-post-title">
+      <a href={{ url_for('post', id=item['id']) }}>{{ item['title'] }}</a>
+    </h2>
+  </li>
+    <p>{{ item['content'][:160] }}...
+      <a href={{ url_for('post', id=item['id']) }}>read more</a></p>
+    {% endfor %}
+  </ul>
+</div>
+</div>
+</div>
+{% endblock %}

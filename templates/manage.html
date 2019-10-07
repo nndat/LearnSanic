@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+<div class="col-md-8 blog-main">
+<div class="blog-post">
+  <h1>Hello</h1>
+  <br>
+  <ul>
+    {% for item in posts %}
+    <li>
+      <h2 class="blog-post-title">
+      <a href={{ url_for('post', id=item['id']) }}>{{ item['title'] }}</a>
+    </h2>
+    <form action="" method="post">
+    <button type="submit" name="del" value={{ item['id'] }}>Delete</button>
+    <button type="submit" name="edit" value={{ item['id'] }}>Edit</button>
+  </form>
+  </li>
+    {% endfor %}
+  </ul>
+</div>
+</div>
+</div>
+{% endblock %}

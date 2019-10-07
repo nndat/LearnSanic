@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>{{ post['title'] }}</title>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1>{{ post['title'] }}</h1>
+  <p>
+    {{ post['content'] }}
+  </p>
+
+  <form class="comments" action={{ url_for('create_comment', id=post['id']) }} method="post">
+    <h5>Comment</h5><br>
+    <textarea style="width:500px; height:300px;" name="comment" required></textarea><br>
+    <input type="submit" value="Comment">
+  </form>
+
+  <div class="comments">
+  <url>
+    {% for cm in comments %}
+    <li>
+      <span>Time: {{ cm['create_at'] }}</span>
+      <p>{{ cm['content'] }}</p>
+    </li>
+    {% endfor %}
+  </url>
+  </div>
+</div>
+{% endblock %}
