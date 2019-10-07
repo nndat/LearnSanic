@@ -2,6 +2,7 @@ from sanic import Sanic, response
 from sanic_jinja2 import SanicJinja2
 from sanic.response import redirect
 from datetime import datetime
+from markdown import markdown
 
 import database as db
 
@@ -34,7 +35,7 @@ async def create_post(request):
         post = {
             'create_at': datetime.now(),
             'title': title,
-            'content': content
+            'content': markdown(content)
         }
         db.add_post(post)
         return redirect(app.url_for('home'))
@@ -89,4 +90,4 @@ async def about(request):
 
 if __name__ == '__main__':
     db.initdb()
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8000, debug=True)
