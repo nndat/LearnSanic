@@ -12,6 +12,9 @@
       <a href={{ url_for('post', id=item['id']) }}>{{ item['title'] }}</a>
     </h2>
   </li>
+    <p class="blog-post-meta">
+      <small>Create at: {{ item['create_at'] }}</small>
+    </p>
     <p>{{ item['content'][:160] }}...
       <a href={{ url_for('post', id=item['id']) }}>read more</a></p>
     {% endfor %}

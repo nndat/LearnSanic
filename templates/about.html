@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
-{% block title %}<title>About</title>{% endblock %}
+{% block title %}
+  <title>About</title>
+{% endblock %}
 
 {% block body %}
-<div class="container">
-  <p>
-    <h3><b>Just a simply blog app create with python sanic and sqlite3</b></h3>
-  </p>
+<div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" src={{ url_for('static', filename='/imgs/dog.jpeg') }} alt="" width="300" height="300">
+    <h2><b>About</h2>
+    <p class="lead">Just a simple blog create with python sanic</p>
 </div>
+
 {% endblock %}

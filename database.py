@@ -45,7 +45,8 @@ def get_connect():
 def get_all_posts(num=None):
     con, cur = get_connect()
     if num is None:
-        posts = cur.execute("SELECT * FROM posts").fetchall()
+        posts = cur.execute("""SELECT * FROM posts
+                                ORDER BY create_at DESC""").fetchall()
     else:
         posts = cur.execute("SELECT * FROM posts").fetchmany(num)
     con.close()
