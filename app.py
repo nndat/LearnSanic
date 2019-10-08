@@ -76,7 +76,7 @@ async def edit_post(request, id):
     post = {
         'id': id,
         'title': request.form.get('title'),
-        'content': request.form.get('content'),
+        'content': markdown(request.form.get('content')),
         'create_at': datetime.now()
     }
     db.update_post(post)
